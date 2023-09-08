@@ -31,4 +31,4 @@ cur.execute(create_table_query)
 conn.commit()
 conn.close()
 
-print("Database and table created successfully.")
+print("Database and table created successfully!")
