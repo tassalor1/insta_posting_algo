@@ -1,10 +1,10 @@
 import sqlite3
-conn = sqlite3.connect('insta_hashtag_data1.db')
 
+conn = sqlite3.connect('insta_hashtag_data1.db')
 cur = conn.cursor()
 
 create_table_query = """
-CREATE TABLE IF NOT EXISTS insta_hashtag_data_g (
+CREATE TABLE IF NOT EXISTS insta_hashtag_data1 (
     id TEXT PRIMARY KEY,
     type TEXT,
     shortCode TEXT,
@@ -24,10 +24,7 @@ CREATE TABLE IF NOT EXISTS insta_hashtag_data_g (
 );
 """
 
-
 cur.execute(create_table_query)
-
-
 conn.commit()
 conn.close()
 
