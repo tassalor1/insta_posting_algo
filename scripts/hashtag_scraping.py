@@ -113,15 +113,15 @@ class Bot:
                     cur.execute(insert_query, values)
                     if cur.rowcount > 0:
                         rows_inserted += 1
-        except sqlite3.Error as e:
-            logging.error(f"Database error: {e}")
-        finally:
-            if conn:
-                conn.commit()
-                conn.close()
+                except sqlite3.Error as e:
+                    logging.error(f"Database error: {e}")
+                finally:
+                    if conn:
+                        conn.commit()
+                        conn.close()
 
-        logging.info(f'{rows_inserted} rows inserted.')
-        print(f'{rows_inserted} rows inserted.')
+                        logging.info(f'{rows_inserted} rows inserted.')
+                        print(f'{rows_inserted} rows inserted.')
 
 
     def db_summary(self):
