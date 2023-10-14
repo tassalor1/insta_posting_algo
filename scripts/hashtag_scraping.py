@@ -34,7 +34,7 @@ class Bot:
             img_urls = self.process_items(self)
 
         logging.info(f"Skipped {self.post_skip_count} posts")
-        logging.info(f'Fetched {len(posts)} items.')
+        logging.info(f'Fetched {len(posts)} items')
         
 
     def process_items(self):
@@ -61,7 +61,7 @@ class Bot:
             existing_ids = {row[0] for row in cur.fetchall()}
             return existing_ids
         except sqlite3.Error as e:
-            logging.error(f"Database error: {e}")
+            logging.error(f"db error: {e}")
         finally:
             if conn:
                 conn.close()
@@ -69,8 +69,8 @@ class Bot:
 
     def insert_db(self, data):
         if not data:
-            print("No data to insert.")
-            logging.info("No data to insert.")
+            print("No data to insert")
+            logging.info("No data to insert")
             return
 
         try:
@@ -114,10 +114,10 @@ class Bot:
                     if cur.rowcount > 0:
                         rows_inserted += 1
                 except sqlite3.Error as e:
-                    logging.error(f"Database error: {e}")
+                    logging.error(f"db error: {e}")
 
-            logging.info(f'{rows_inserted} rows inserted.')
-            print(f'{rows_inserted} rows inserted.')
+            logging.info(f'{rows_inserted} rows inserted')
+            print(f'{rows_inserted} rows inserted')
         finally:
             if conn:
                 conn.commit()
@@ -134,8 +134,8 @@ class Bot:
 
         conn.close()
 
-        logging.info(f'Database summary: {total_rows} rows in total.')
-        print(f'Database summary: {total_rows} rows in total.')
+        logging.info(f'db summary: {total_rows} rows in total')
+        print(f'db summary: {total_rows} rows in total')
 
 
     def download_images(self):
@@ -156,8 +156,8 @@ class Bot:
             except requests.RequestException as e:
                 logging.error(f"Failed to download image {idx+1} due to {e}")
 
-        print(f"Successfully downloaded {img_count} out of {len(self.img_urls)} images.")
-        logging.info(f"Successfully downloaded {img_count} out of {len(self.img_urls)} images.")
+        print(f"Successfully downloaded {img_count} out of {len(self.img_urls)} images")
+        logging.info(f"Successfully downloaded {img_count} out of {len(self.img_urls)} images")
 
 config = {
     "APIFY_API_KEY": APIFY_API_KEY,
