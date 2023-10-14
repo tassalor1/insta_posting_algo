@@ -1,1 +1,10 @@
 scripts/credentials.py
+scripts/session.json
+scripts/insta_hashtag.db
+dbs/insta_hashtag_data.db
+dbs/insta_hashtag_data1
+dbs/insta_hashtag_data1.db
+scripts/downloaded_images
+scripts/config
+scripts/__pycache__
+scripts/.ipynb_checkpoints
