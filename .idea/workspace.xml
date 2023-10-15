@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="885b0c79-43a6-4a10-b110-bac580b008e3" name="Changes" comment="logging">
+      <change beforePath="$PROJECT_DIR$/scripts/insta_hashtag_scraping_pipline.ipynb" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;tassalor1&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="ecf0d8c0-5d43-4304-8651-63173e4bf1e0" />
+        <option name="url" value="https://github.com/tassalor1/insta_scraper" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="2V8Kh4PvNUDyoeg6sZzvsOvVc2E" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/coding/instagram&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\coding\instagram\scripts" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.hashtag_scraping">
+    <configuration name="hashtag_scraping" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="instagram" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/hashtag_scraping.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="insta_bot" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="instagram" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/insta_bot.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="post_img" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="instagram" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/post_img.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.hashtag_scraping" />
+        <item itemvalue="Python.post_img" />
+        <item itemvalue="Python.insta_bot" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="885b0c79-43a6-4a10-b110-bac580b008e3" name="Changes" comment="" />
+      <created>1694212382268</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1694212382268</updated>
+      <workItem from="1694212383326" duration="2554000" />
+      <workItem from="1694544773302" duration="1125000" />
+      <workItem from="1694883176976" duration="403000" />
+      <workItem from="1694883692582" duration="3345000" />
+      <workItem from="1695478972483" duration="24000" />
+      <workItem from="1695508541099" duration="519000" />
+      <workItem from="1695561153235" duration="5000000" />
+      <workItem from="1695839275503" duration="21000" />
+      <workItem from="1696455680578" duration="633000" />
+      <workItem from="1696541856537" duration="142000" />
+      <workItem from="1696885968790" duration="644000" />
+      <workItem from="1696961617379" duration="50000" />
+      <workItem from="1696961668836" duration="8105000" />
+      <workItem from="1697058086823" duration="3368000" />
+      <workItem from="1697147880264" duration="2592000" />
+      <workItem from="1697236099501" duration="789000" />
+      <workItem from="1697285176910" duration="2117000" />
+      <workItem from="1697293178723" duration="235000" />
+    </task>
+    <task id="LOCAL-00001" summary="initial">
+      <option name="closed" value="true" />
+      <created>1694212790201</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1694212790201</updated>
+    </task>
+    <task id="LOCAL-00002" summary="initial">
+      <option name="closed" value="true" />
+      <created>1694213052402</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1694213052402</updated>
+    </task>
+    <task id="LOCAL-00003" summary="db script">
+      <option name="closed" value="true" />
+      <created>1694214214034</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1694214214034</updated>
+    </task>
+    <task id="LOCAL-00004" summary="db script">
+      <option name="closed" value="true" />
+      <created>1694214289317</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1694214289317</updated>
+    </task>
+    <task id="LOCAL-00005" summary="logic change">
+      <option name="closed" value="true" />
+      <created>1694214675092</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1694214675092</updated>
+    </task>
+    <task id="LOCAL-00006" summary="logic change">
+      <option name="closed" value="true" />
+      <created>1694214777954</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1694214777954</updated>
+    </task>
+    <task id="LOCAL-00007" summary="logic change">
+      <option name="closed" value="true" />
+      <created>1694545593573</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1694545593573</updated>
+    </task>
+    <task id="LOCAL-00008" summary="new data pipline script">
+      <option name="closed" value="true" />
+      <created>1694883253834</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1694883253834</updated>
+    </task>
+    <task id="LOCAL-00009" summary="change of logic">
+      <option name="closed" value="true" />
+      <created>1694883274261</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1694883274261</updated>
+    </task>
+    <task id="LOCAL-00010" summary="change of logic">
+      <option name="closed" value="true" />
+      <created>1694883893346</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1694883893346</updated>
+    </task>
+    <task id="LOCAL-00011" summary="change of logic">
+      <option name="closed" value="true" />
+      <created>1694883942632</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1694883942632</updated>
+    </task>
+    <task id="LOCAL-00012" summary="adding more logic">
+      <option name="closed" value="true" />
+      <created>1694899138965</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1694899138965</updated>
+    </task>
+    <task id="LOCAL-00013" summary="adding more logic">
+      <option name="closed" value="true" />
+      <created>1694900449375</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1694900449375</updated>
+    </task>
+    <task id="LOCAL-00014" summary="created script to post desired post">
+      <option name="closed" value="true" />
+      <created>1694900476368</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1694900476368</updated>
+    </task>
+    <task id="LOCAL-00015" summary="change db">
+      <option name="closed" value="true" />
+      <created>1695588098261</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1695588098261</updated>
+    </task>
+    <task id="LOCAL-00016" summary="change logic to save pics">
+      <option name="closed" value="true" />
+      <created>1695588125162</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1695588125162</updated>
+    </task>
+    <task id="LOCAL-00017" summary="logic updates to post">
+      <option name="closed" value="true" />
+      <created>1695588172434</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1695588172434</updated>
+    </task>
+    <task id="LOCAL-00018" summary="   save img logic">
+      <option name="closed" value="true" />
+      <created>1695593441507</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1695593441507</updated>
+    </task>
+    <task id="LOCAL-00019" summary="  db">
+      <option name="closed" value="true" />
+      <created>1695593455660</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1695593455660</updated>
+    </task>
+    <task id="LOCAL-00020" summary="changes">
+      <option name="closed" value="true" />
+      <created>1695594058250</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1695594058250</updated>
+    </task>
+    <task id="LOCAL-00021" summary="changes">
+      <option name="closed" value="true" />
+      <created>1695594065337</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1695594065337</updated>
+    </task>
+    <task id="LOCAL-00022" summary="script to add to sheets">
+      <option name="closed" value="true" />
+      <created>1696455717957</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1696455717957</updated>
+    </task>
+    <task id="LOCAL-00023" summary="script to post">
+      <option name="closed" value="true" />
+      <created>1696886017336</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1696886017336</updated>
+    </task>
+    <task id="LOCAL-00024" summary="script to post using selenium">
+      <option name="closed" value="true" />
+      <created>1696965667589</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1696965667589</updated>
+    </task>
+    <task id="LOCAL-00025" summary="script to post using selenium">
+      <option name="closed" value="true" />
+      <created>1696974101333</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1696974101333</updated>
+    </task>
+    <task id="LOCAL-00026" summary="script to post using selenium">
+      <option name="closed" value="true" />
+      <created>1696974105324</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1696974105324</updated>
+    </task>
+    <task id="LOCAL-00027" summary="script that takes img to and makes url">
+      <option name="closed" value="true" />
+      <created>1697060024395</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1697060024395</updated>
+    </task>
+    <task id="LOCAL-00028" summary="framework to scrape hashtags">
+      <option name="closed" value="true" />
+      <created>1697149754202</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1697149754202</updated>
+    </task>
+    <task id="LOCAL-00029" summary="framework to scrape hashtags">
+      <option name="closed" value="true" />
+      <created>1697150463070</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1697150463070</updated>
+    </task>
+    <task id="LOCAL-00030" summary="new ignore files">
+      <option name="closed" value="true" />
+      <created>1697293200444</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1697293200444</updated>
+    </task>
+    <task id="LOCAL-00031" summary="logging">
+      <option name="closed" value="true" />
+      <created>1697293380433</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1697293380433</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="initial" />
+    <MESSAGE value="db script" />
+    <MESSAGE value="logic change" />
+    <MESSAGE value="new data pipline script" />
+    <MESSAGE value="change of logic" />
+    <MESSAGE value="adding more logic" />
+    <MESSAGE value="created script to post desired post" />
+    <MESSAGE value="change db" />
+    <MESSAGE value="change logic to save pics" />
+    <MESSAGE value="logic updates to post" />
+    <MESSAGE value="   save img logic" />
+    <MESSAGE value="  db" />
+    <MESSAGE value="changes" />
+    <MESSAGE value="script to add to sheets" />
+    <MESSAGE value="script to post" />
+    <MESSAGE value="script to post using selenium" />
+    <MESSAGE value="script that takes img to and makes url" />
+    <MESSAGE value="framework to scrape hashtags" />
+    <MESSAGE value="new ignore files" />
+    <MESSAGE value="logging" />
+    <option name="LAST_COMMIT_MESSAGE" value="logging" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/scripts/insta_bot.py</url>
+          <line>18</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/instagram$gen.coverage" NAME="gen Coverage Results" MODIFIED="1695508574898" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/instagram$insta_bot.coverage" NAME="insta_bot Coverage Results" MODIFIED="1696970515881" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/instagram$db_creation.coverage" NAME="db_creation Coverage Results" MODIFIED="1695590682364" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/instagram$post_img.coverage" NAME="post_img Coverage Results" MODIFIED="1697237154988" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/instagram$hashtag_scraping.coverage" NAME="hashtag_scraping Coverage Results" MODIFIED="1697289213028" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/instagram$google_drive_script.coverage" NAME="google_drive_script Coverage Results" MODIFIED="1697059909754" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/instagram$test.coverage" NAME="test Coverage Results" MODIFIED="1696541874024" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>

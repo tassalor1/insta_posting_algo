@@ -5,7 +5,9 @@ from credentials import APIFY_API_KEY
 import logging
 import os
 import requests
-
+import subprocess
+import time
+ 
 
 class Bot:
 
@@ -13,28 +15,36 @@ class Bot:
     def setup_logging():
         logging.basicConfig(filename='db_operations.log', level=logging.INFO)
 
-    def __init__(self, APIFY_API_KEY, hashtags, result_limit, apify_actor, min_likes, db_path, post_skip_count):
+    def __init__(self, APIFY_API_KEY, hashtags, result_limit, apify_actor, min_likes, db_path, post_skip_count, img_urls, proxy_config):
         self.APIFY_API_KEY = APIFY_API_KEY
         self.hashtags = hashtags
         self.result_limit = result_limit
         self.apify_actor = apify_actor
         self.min_likes = min_likes
         self.db_path = db_path
-        self.post_skip_count = 0
+        self.post_skip_count = post_skip_count
+        self.img_urls = []
+        self.proxy_config = proxy_config
 
     def fetch_data(self):
         self.client = ApifyClient(self.APIFY_API_KEY)
         self.posts = []
         self.existing_ids = self.get_existing_ids()
+       
+
 
         for hashtag in self.hashtags:
-            run_input = {"hashtags": [hashtag], "resultsLimit": self.result_limit}
+            run_input = {"hashtags": [hashtag], 
+                         "resultsLimit": self.result_limit,
+                         "proxyConfiguration": self.proxy_config}
             self.run = self.client.actor(self.apify_actor).call(run_input=run_input)
 
-            img_urls = self.process_items(self)
+            self.img_urls = self.process_items()
 
+            time.sleep(90)
+ 
         logging.info(f"Skipped {self.post_skip_count} posts")
-        logging.info(f'Fetched {len(posts)} items')
+        logging.info(f'Fetched {len(self.posts)} items')
         
 
     def process_items(self):
@@ -44,12 +54,13 @@ class Bot:
                 if item['likesCount'] >= self.min_likes and item['id'] not in self.existing_ids:
                     img_url = item.get('displayUrl', None)
                     if img_url:
-                        img_urls.append(img_url)
+                        self.img_urls.append(img_url)
                     self.posts.append(item)
                 else:
-                    post_skip_count += 1
+                    self.post_skip_count += 1
             except Exception as e:
                 logging.error(f"Error in processing item: {e}")
+        return self.img_urls
         
 
     def get_existing_ids(self):
@@ -151,7 +162,7 @@ class Bot:
                 with open(img_path, 'wb') as f:
                     f.write(img.content)
                 img_count += 1
-                logging.info(f"Successfully downloaded image {idx+1} of {len(img_urls)}")
+                logging.info(f"Successfully downloaded image {idx+1} of {len(self.img_urls)}")
 
             except requests.RequestException as e:
                 logging.error(f"Failed to download image {idx+1} due to {e}")
@@ -159,19 +170,26 @@ class Bot:
         print(f"Successfully downloaded {img_count} out of {len(self.img_urls)} images")
         logging.info(f"Successfully downloaded {img_count} out of {len(self.img_urls)} images")
 
+        if img_count == 0:
+            # call missing_imgs script to download if img_count is 0
+            subprocess.call(["python", "missing_imgs.py"])
+                    
+
 config = {
     "APIFY_API_KEY": APIFY_API_KEY,
     "hashtags": ['gorpcore', 'goretexstudio', 'outdoorism', 'gorpcorefashion', 'arcteryx', 'gorpcorestyle', 'outdoorism', 'itsbetteroutside'],
-    "result_limit": 50,
+    "result_limit": 500 ,
     "apify_actor": "apify/instagram-hashtag-scraper",
-    "min_likes": 1000,
-    "db_path": "D:\coding\instagram\scripts\insta_hashtag.db"
+    "min_likes": 1800,
+    "db_path": "D:\coding\instagram\scripts\insta_hashtag.db",
+    "post_skip_count": 0,
+    "img_urls": [],
+    "proxy_config": {'useApifyProxy': True,'apifyProxyGroups': ['BUYPROXIES94952']}
 }
-
 if __name__ == "__main__":
     Bot.setup_logging()
     bot = Bot(**config)
-    posts, img_urls = bot.fetch_data()
-    bot.insert_db(posts)
+    bot.fetch_data()
+    bot.insert_db(bot.posts)
     bot.db_summary()
-    bot.download_images(img_urls)
+    bot.download_images()

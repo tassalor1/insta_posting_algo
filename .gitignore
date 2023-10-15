@@ -8,3 +8,4 @@ scripts/downloaded_images
 scripts/config
 scripts/__pycache__
 scripts/.ipynb_checkpoints
+xml

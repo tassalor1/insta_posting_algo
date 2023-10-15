@@ -1,7 +1,12 @@
+'''
+to upload imgs through the graph api the img file is required to be publicy available through a url. 
+this script uploads it to a google drive
+'''
 import os
 from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
+
 
 # load the service account credentials from json file
 credentials = Credentials.from_service_account_file(
