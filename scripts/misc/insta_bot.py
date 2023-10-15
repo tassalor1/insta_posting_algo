@@ -1,6 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from credentials import insta_user, insta_password
+from scripts.data_pull.credentials import insta_user, insta_password
 from time import sleep
 
 class Bot():
