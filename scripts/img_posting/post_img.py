@@ -9,7 +9,11 @@ from googleapiclient.http import MediaFileUpload
 # https://developers.facebook.com/docs/instagram-api/guides/content-publishing # insta docs
 
 
-class post_img:
+class PostImg:
+
+    @staticmethod
+    def setup_logging():
+        logging.basicConfig(filename='post_operations.log', level=logging.INFO)
 
     def __init__(self, google_json, insta_access_token, insta_user_id, image_url, caption, default_hashtags):
         self.google_json = google_json
@@ -18,6 +22,7 @@ class post_img:
         self.image_url = image_url
         self.caption = caption
         self.default_hashtags = default_hashtags
+        self.ids = []
 
         
 
@@ -32,71 +37,84 @@ class post_img:
         
     def get_posted_posts(self):
         ## get ids that have been posted to cross reference
-        with open('posted_ids', 'r') as f:
-             self.ids = [line.strip() for line in f]
+        try:
+            with open('posted_ids', 'r') as f:
+                self.ids = [line.strip() for line in f]
+        except FileNotFoundError:
+            logging.warning("posted_ids file not found")
         
     def get_top_post(self):
-        conn = None
-        try:
-            conn = self.connect_db()
-            cur = conn.cursor()
-            cur.execute("SELECT MAX(LikeCount) FROM insta_hashtag")
-            self.top_post = cur.fetchone()[0]  
+        conn = self.connect_db()
+        if conn:
+            try:
+                cur = conn.cursor()
+                cur.execute("SELECT MAX(LikeCount) FROM insta_hashtag")
+                self.top_post = cur.fetchone()[0]
 
-            # check if it has been posted before
-            if self.top_post not in self.ids:
-                print('top post fetched')
-            else:
-                return None
+                if self.top_post not in self.ids:
+                    logging.info('Top post fetched')
+                else:
+                    logging.warning('Top post already posted')
+                    self.top_post = None
 
-        except sqlite3.Error as e:
-            logging.error(f"db error: {e}")
-            return None
+            except sqlite3.Error as e:
+                logging.error(f"Database error: {e}")
+        else:
+            logging.warning("Failed to connect to the database")
 
     def get_img(self):
         # get matching img for id
         self.img_path = os.path.join('downloaded_images', f'image_{self.top_post}.jpg')
         if os.path.exists(self.img_path):
-            print('matching img fetched')
+            logging.info('Matching image fetched')
         else:
-            return None
+            logging.warning('Image not found')
+            self.img_path = None
 
 
     def google_drive(self):
-        # load the service account credentials from json file
-        credentials = Credentials.from_service_account_file(
-            self.google_json,
-            scopes=['https://www.googleapis.com/auth/drive']
-        )
-        # Build the service object
-        drive_service = build('drive', 'v3', credentials=credentials)
+        try:
+            credentials = Credentials.from_service_account_file(
+                self.google_json,
+                scopes=['https://www.googleapis.com/auth/drive']
+            )
+            drive_service = build('drive', 'v3', credentials=credentials)
 
-        file_metadata = {'name': os.path.basename(self.img_path)}
-        media = MediaFileUpload(self.img_path, mimetype='image/jpeg')
-        file = drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+            file_metadata = {'name': os.path.basename(self.img_path)}
+            media = MediaFileUpload(self.img_path, mimetype='image/jpeg')
+            file = drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
 
-        # make the file publicly accessible and retrieve sharing link
-        file_id = file.get('id')
-        drive_service.permissions().create(
-            fileId=file_id,
-            body={'type': 'anyone', 'role': 'reader'},
-            fields='id'
-        ).execute()
-        self.public_url = f"https://drive.google.com/uc?export=view&id={file_id}"
+            file_id = file.get('id')
 
-        print(f"Public URL: {self.public_url} has been created")
+            # make the file publicly accessible and retrieve sharing link
+            file_id = file.get('id')
+            drive_service.permissions().create(
+                fileId=file_id,
+                body={'type': 'anyone', 'role': 'reader'},
+                fields='id'
+            ).execute()
+            self.public_url = f"https://drive.google.com/uc?export=view&id={file_id}"
+
+            logging.info(f"Public URL: {self.public_url} has been created")
+
+        except Exception as e:
+            logging.error(f"Google Drive error: {e}")
 
 
     def get_owner_username(self):
-         # get username of the author of the post
-         self.owner_id = self.top_post['ownerId']
-         owner_url = f"https://graph.instagram.com/{self.owner_id}?fields=username&access_token={self.insta_access_token}"
-         owner_response = requests.get(owner_url)
-         owner_data = owner_response.json()
-         self.owner_username = owner_data.get('username', 'Username not found')
-         print(f'owner user name aquired{self.owner_username}')
+        #get username of the author
+        try:
+            self.owner_id = self.top_post['ownerId']
+            owner_url = f"https://graph.instagram.com/{self.owner_id}?fields=username&access_token={self.insta_access_token}"
+            owner_response = requests.get(owner_url)
+            owner_data = owner_response.json()
+            self.owner_username = owner_data.get('username', 'Username not found')
+            logging.info(f'Owner username acquired: {self.owner_username}')
 
-    def caption(self):
+        except requests.RequestException as e:
+            logging.error(f"Request error: {e}")
+
+    def generate_caption(self):
         #get hashtags from post or if none default
         self.hashtags == None
         self.hashtags = self.top_post['hashtags']
@@ -130,24 +148,24 @@ class post_img:
             'caption': self.caption,
             'access_token': self.insta_access_token
         }
+        try:
+            response = requests.post(url, params=params)
+            # grabs media object id
+            container_id = response.json()['id']
+            #publish pic
+            publish_url = f"https://graph.facebook.com/v18.0/{self.insta_user_id}/media_publish?creation_id={container_id}&access_token={self.insta_access_token}"
 
-        response = requests.post(url, params=params)
+            response = requests.post(publish_url)
+            logging.info(response.json())
+            print(f'post has been created: {publish_url}')
+            # create a file that add posted ids into it
+            with open('posted_ids', 'a') as f:
+                f.write(str(self.top_post) + '\n')
 
-        # grabs media object id
-        container_id = response.json()['id']
-        #publish pic
-        publish_url = f"https://graph.facebook.com/v18.0/{insta_user_id}/media_publish?creation_id={container_id}&access_token={self.insta_access_token}"
+        except requests.RequestException as e:
+            logging.error(f"Request error: {e}")
 
-        response = requests.post(publish_url)
-        print(response.json())
-
-        # create a file that add posted ids into it
-        with open('posted_ids', 'a') as f:
-             f.write({self.top_post})
-            
  
-
-
 config = {
     "google_json": "D:/coding/instagram/scripts/insta-401020-d2b56e3d4162.json",
     "insta_access_token": insta_api,
@@ -156,3 +174,14 @@ config = {
                          "arcteryx", "salomon", "gorpcorefashion", "gorpcorestyle", "functionalarchive", 
                          "ootd", "explore", "getoutside"]
 }
+if __name__ == "__main__":
+    PostImg.setup_logging()
+    post = PostImg(**config)
+    post.get_posted_posts()
+    post.get_top_post()
+    post.get_img()
+    post.google_drive()
+    post.get_owner_username()
+    post.generate_caption()
+    post.insta_api_post()
+    
