@@ -1,5 +1,5 @@
 import requests
-from scripts.data_pull.credentials import insta_api, insta_user_id
+from credentials_img_posting import insta_api, insta_user_id
 import os
 import sqlite3
 import logging
@@ -11,12 +11,13 @@ from googleapiclient.http import MediaFileUpload
 
 class post_img:
 
-    def __init__(self, google_json, insta_access_token, insta_user_id, image_url, caption):
+    def __init__(self, google_json, insta_access_token, insta_user_id, image_url, caption, default_hashtags):
         self.google_json = google_json
         self.insta_access_token = insta_access_token
         self.insta_user_id = insta_user_id
         self.image_url = image_url
         self.caption = caption
+        self.default_hashtags = default_hashtags
 
         
 
@@ -29,6 +30,11 @@ class post_img:
             logging.error(f"db error: {e}")
             return None    
         
+    def get_posted_posts(self):
+        ## get ids that have been posted to cross reference
+        with open('posted_ids', 'r') as f:
+             self.ids = [line.strip() for line in f]
+        
     def get_top_post(self):
         conn = None
         try:
@@ -38,7 +44,7 @@ class post_img:
             self.top_post = cur.fetchone()[0]  
 
             # check if it has been posted before
-            if self.top_post not in self.get_posted_posts():
+            if self.top_post not in self.ids:
                 print('top post fetched')
             else:
                 return None
@@ -48,9 +54,9 @@ class post_img:
             return None
 
     def get_img(self):
-
+        # get matching img for id
         self.img_path = os.path.join('downloaded_images', f'image_{self.top_post}.jpg')
-        if os.path.exists(self.img_path ):
+        if os.path.exists(self.img_path):
             print('matching img fetched')
         else:
             return None
@@ -82,14 +88,25 @@ class post_img:
 
 
     def get_owner_username(self):
-         # call api to get owner username from there id
+         # get username of the author of the post
+         self.owner_id = self.top_post['ownerId']
+         owner_url = f"https://graph.instagram.com/{self.owner_id}?fields=username&access_token={self.insta_access_token}"
+         owner_response = requests.get(owner_url)
+         owner_data = owner_response.json()
+         self.owner_username = owner_data.get('username', 'Username not found')
+         print(f'owner user name aquired{self.owner_username}')
 
-    def insta_api_post(self):
+    def caption(self):
+        #get hashtags from post or if none default
+        self.hashtags == None
+        self.hashtags = self.top_post['hashtags']
+        if self.hashtags == None:
+            self.hashtags == self.default_hashtags
+            print('post has no hastags')
+        
+        self.caption = f'''⅋ 🪡
 
-
-        self.caption = "⅋ 🪡
-
-                        Via. self.author
+                        Via. {self.owner_username}
 
                         —————————————————-
                         𝘍𝘰𝘭𝘭𝘰𝘸 @clavext 𝘧𝘰𝘳 𝘮𝘰𝘳𝘦 𝘤𝘰𝘯𝘵𝘦𝘯𝘵
@@ -101,7 +118,10 @@ class post_img:
                         .
                         .
                         .
-                        self.hashtags git "
+                        {self.hashtags}'''
+        
+
+    def insta_api_post(self):
 
         url = f"https://graph.facebook.com/v18.0/{self.insta_user_id}/media"
         # create container
@@ -122,16 +142,17 @@ class post_img:
         print(response.json())
 
         # create a file that add posted ids into it
-        with open(wb') as f:
-
-    def get_posted_posts(self):
-        ## open posted id file
-        with open() 'wb') as f:
-    pass
+        with open('posted_ids', 'a') as f:
+             f.write({self.top_post})
+            
+ 
 
 
 config = {
     "google_json": "D:/coding/instagram/scripts/insta-401020-d2b56e3d4162.json",
     "insta_access_token": insta_api,
-    "insta_user_id": insta_user_id
+    "insta_user_id": insta_user_id,
+    "default_hashtags": ["gorpcore","outerwear", "gorp", "gorpcorefashion", "outdoors", 
+                         "arcteryx", "salomon", "gorpcorefashion", "gorpcorestyle", "functionalarchive", 
+                         "ootd", "explore", "getoutside"]
 }
