@@ -15,14 +15,19 @@ class PostImg:
     def setup_logging():
         logging.basicConfig(filename='post_operations.log', level=logging.INFO)
 
-    def __init__(self, google_json, insta_access_token, insta_user_id, image_url, caption, default_hashtags):
+    def __init__(self, google_json, insta_access_token, insta_user_id, default_hashtags, db_path):
         self.google_json = google_json
         self.insta_access_token = insta_access_token
         self.insta_user_id = insta_user_id
-        self.image_url = image_url
-        self.caption = caption
         self.default_hashtags = default_hashtags
+        self.db_path = db_path
         self.ids = []
+        self.top_post = None
+        self.owner_id = None
+        self.hashtags = None
+        self.public_url = ()
+        self.owner_username = ()
+    
 
         
 
@@ -48,19 +53,24 @@ class PostImg:
         if conn:
             try:
                 cur = conn.cursor()
-                cur.execute("SELECT MAX(LikeCount) FROM insta_hashtag")
+                cur.execute("SELECT MAX(LikeCount), ownerId, hashtags FROM insta_hashtag")
                 self.top_post = cur.fetchone()[0]
+                self.owner_id = cur.fetchone()[1]
+                self.hashtags = cur.fetchone()[2]
 
-                if self.top_post not in self.ids:
-                    logging.info('Top post fetched')
-                else:
-                    logging.warning('Top post already posted')
-                    self.top_post = None
+                while self.top_post in self.ids:
+                    cur.execute("SELECT MAX(LikeCount), ownerId, hashtags FROM insta_hashtag WHERE LikeCount < ?", (self.top_post,))
+                    self.top_post = cur.fetchone()[0]
+                    self.owner_id = cur.fetchone()[1]
+                    self.hashtags = cur.fetchone()[2]
+
+                logging.info('Top post fetched')
 
             except sqlite3.Error as e:
                 logging.error(f"Database error: {e}")
         else:
             logging.warning("Failed to connect to the database")
+
 
     def get_img(self):
         # get matching img for id
@@ -104,7 +114,6 @@ class PostImg:
     def get_owner_username(self):
         #get username of the author
         try:
-            self.owner_id = self.top_post['ownerId']
             owner_url = f"https://graph.instagram.com/{self.owner_id}?fields=username&access_token={self.insta_access_token}"
             owner_response = requests.get(owner_url)
             owner_data = owner_response.json()
@@ -116,8 +125,6 @@ class PostImg:
 
     def generate_caption(self):
         #get hashtags from post or if none default
-        self.hashtags == None
-        self.hashtags = self.top_post['hashtags']
         if self.hashtags == None:
             self.hashtags == self.default_hashtags
             print('post has no hastags')
@@ -150,8 +157,9 @@ class PostImg:
         }
         try:
             response = requests.post(url, params=params)
+            print(response.json())
             # grabs media object id
-            container_id = response.json()['id']
+            container_id = response.json().get('id', 'ID not found')
             #publish pic
             publish_url = f"https://graph.facebook.com/v18.0/{self.insta_user_id}/media_publish?creation_id={container_id}&access_token={self.insta_access_token}"
 
@@ -172,7 +180,8 @@ config = {
     "insta_user_id": insta_user_id,
     "default_hashtags": ["gorpcore","outerwear", "gorp", "gorpcorefashion", "outdoors", 
                          "arcteryx", "salomon", "gorpcorefashion", "gorpcorestyle", "functionalarchive", 
-                         "ootd", "explore", "getoutside"]
+                         "ootd", "explore", "getoutside"],
+    "db_path": "D:\coding\instagram\scripts\insta_hashtag.db"
 }
 if __name__ == "__main__":
     PostImg.setup_logging()
