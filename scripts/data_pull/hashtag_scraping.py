@@ -1,7 +1,7 @@
 from apify_client import ApifyClient
 import sqlite3
 import json
-from credentials import APIFY_API_KEY
+from credentials_data_pull import APIFY_API_KEY
 import logging
 import os
 import requests
@@ -73,6 +73,7 @@ class Bot:
             except Exception as e:
                 logging.error(f"Error in processing item: {e}")
         return self.img_urls
+        
         
     
     def get_existing_ids(self):
@@ -196,9 +197,9 @@ class Bot:
 config = {
     "APIFY_API_KEY": APIFY_API_KEY,
     "hashtags": ['gorpcore', 'goretexstudio', 'outdoorism', 'gorpcorefashion', 'arcteryx', 'gorpcorestyle', 'outdoorism', 'itsbetteroutside'],
-    "result_limit": 800 ,
+    "result_limit": 300 ,
     "apify_actor": "apify/instagram-hashtag-scraper",
-    "min_likes": 1800,
+    "min_likes": 300,
     "db_path": "D:\coding\instagram\scripts\insta_hashtag.db",
     "post_skip_count": 0,
     "img_urls": [],
