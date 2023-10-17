@@ -38,6 +38,8 @@ def download_missing_images(db_path):
                 print(f"Failed to download image for post {post_id}. Error: {e}")
     print(f"Successfully downloaded {img_count}")
 
+    print({img_count})
+
 if __name__ == '__main__':
     db_path = "D:\coding\instagram\scripts\insta_hashtag.db" 
     download_missing_images(db_path)

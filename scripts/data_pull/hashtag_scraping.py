@@ -39,7 +39,7 @@ class Bot:
         self.client = ApifyClient(self.APIFY_API_KEY)
         self.posts = []
         self.existing_ids = self.get_existing_ids()
-       
+        run_count = 0
         try:
             # apify api call for each hashtag
             for hashtag in self.hashtags:
@@ -53,6 +53,8 @@ class Bot:
                 time.sleep(90)
                 logging.info(f"Skipped {self.post_skip_count} posts")
                 logging.info(f'Fetched {len(self.posts)} items')
+                run_count += 1
+                print(f'run count: {run_count} = {hashtag}')
 
         except Exception as e:
                 logging.error(f"db error: {e}")
