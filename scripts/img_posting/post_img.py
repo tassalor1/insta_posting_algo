@@ -27,9 +27,7 @@ class PostImg:
         self.hashtags = None
         self.public_url = ()
         self.owner_username = ()
-    
 
-        
 
     def connect_db(self):
         try:
@@ -47,39 +45,35 @@ class PostImg:
                 self.ids = [line.strip() for line in f]
         except FileNotFoundError:
             logging.warning("posted_ids file not found")
-        
+
     def get_top_post(self):
         conn = self.connect_db()
         if conn:
-            try:
-                cur = conn.cursor()
-                cur.execute("SELECT MAX(LikeCount), ownerId, hashtags FROM insta_hashtag")
-                self.top_post = cur.fetchone()[0]
-                self.owner_id = cur.fetchone()[1]
-                self.hashtags = cur.fetchone()[2]
-
-                while self.top_post in self.ids:
-                    cur.execute("SELECT MAX(LikeCount), ownerId, hashtags FROM insta_hashtag WHERE LikeCount < ?", (self.top_post,))
-                    self.top_post = cur.fetchone()[0]
-                    self.owner_id = cur.fetchone()[1]
-                    self.hashtags = cur.fetchone()[2]
-
-                logging.info('Top post fetched')
-
-            except sqlite3.Error as e:
-                logging.error(f"Database error: {e}")
-        else:
-            logging.warning("Failed to connect to the database")
-
+            cur = conn.cursor()
+            cur.execute("SELECT MAX(likesCount), ownerId, hashtags FROM insta_hashtag")
+            row = cur.fetchone()
+            while row:
+                self.top_post, self.owner_id, self.hashtags = row
+                if self.top_post not in self.ids:
+                    img_path = os.path.join('downloaded_images', f'image_{self.top_post}.jpg')
+                    if os.path.exists(img_path):
+                        break
+                # Fetch the next row
+                cur.execute("SELECT MAX(likesCount), ownerId, hashtags FROM insta_hashtag WHERE likesCount < ?",
+                            (self.top_post,))
+                row = cur.fetchone()
+            else:
+                print("No more rows to fetch.")
+                logging.info('No more rows to fetch')
 
     def get_img(self):
-        # get matching img for id
         self.img_path = os.path.join('downloaded_images', f'image_{self.top_post}.jpg')
         if os.path.exists(self.img_path):
             logging.info('Matching image fetched')
+            print('Matching image fetched')
         else:
             logging.warning('Image not found')
-            self.img_path = None
+            print('Image not found')
 
 
     def google_drive(self):
@@ -181,7 +175,7 @@ config = {
     "default_hashtags": ["gorpcore","outerwear", "gorp", "gorpcorefashion", "outdoors", 
                          "arcteryx", "salomon", "gorpcorefashion", "gorpcorestyle", "functionalarchive", 
                          "ootd", "explore", "getoutside"],
-    "db_path": "D:\coding\instagram\scripts\insta_hashtag.db"
+    "db_path": "D:/coding/instagram/scripts/insta_hashtag.db"
 }
 if __name__ == "__main__":
     PostImg.setup_logging()
