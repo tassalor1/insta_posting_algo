@@ -1,0 +1,14 @@
+credentials.py
+session.json
+insta_hashtag.db
+insta_hashtag_data.db
+insta_hashtag_data1
+insta_hashtag_data1.db
+downloaded_images
+config
+__pycache__
+.ipynb_checkpoints
+xml
+.log
+credentials_data_pull.py
+credentials_img_posting.py
