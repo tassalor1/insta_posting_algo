@@ -10,3 +10,7 @@ __pycache__
 .ipynb_checkpoints
 xml
 .log
+scripts/private/credentials.txt
+scripts/post_operations.log
+scripts/db_operations.log
+scripts/posted_ids
