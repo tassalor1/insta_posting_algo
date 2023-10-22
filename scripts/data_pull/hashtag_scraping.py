@@ -108,7 +108,7 @@ class Bot:
             INSERT OR IGNORE INTO insta_hashtag (
                 id, type, shortCode, caption, hashtags, mentions, url, commentsCount, 
                 dimensionsHeight, dimensionsWidth, 
-                displayUrl, images, alt, likesCount, timestamp, ownerId
+                displayUrl, images, alt, likesCount, timestamp, ownerId, ownerUsername
             )
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             """
@@ -135,6 +135,8 @@ class Bot:
                         item.get('likesCount', 0),
                         item.get('timestamp', 'default_timestamp'),
                         item.get('ownerId', 'default_ownerId'),
+                        item.get('ownerUsername', 'default_ownerUsername')
+
                     )
 
                     cur.execute(insert_query, values)
@@ -199,7 +201,7 @@ class Bot:
 config = {
     "APIFY_API_KEY": APIFY_API_KEY,
     "hashtags": ['gorpcore', 'goretexstudio', 'outdoorism', 'gorpcorefashion', 'arcteryx', 'gorpcorestyle', 'outdoorism', 'itsbetteroutside'],
-    "result_limit": 300 ,
+    "result_limit": 3,
     "apify_actor": "apify/instagram-hashtag-scraper",
     "min_likes": 300,
     "db_path": "D:\coding\instagram\scripts\insta_hashtag.db",
