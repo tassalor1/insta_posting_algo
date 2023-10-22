@@ -201,9 +201,9 @@ class Bot:
 config = {
     "APIFY_API_KEY": APIFY_API_KEY,
     "hashtags": ['gorpcore', 'goretexstudio', 'outdoorism', 'gorpcorefashion', 'arcteryx', 'gorpcorestyle', 'outdoorism', 'itsbetteroutside'],
-    "result_limit": 3,
+    "result_limit": 500,
     "apify_actor": "apify/instagram-hashtag-scraper",
-    "min_likes": 300,
+    "min_likes": 350,
     "db_path": "D:\coding\instagram\scripts\insta_hashtag.db",
     "post_skip_count": 0,
     "img_urls": [],

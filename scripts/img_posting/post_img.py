@@ -151,15 +151,15 @@ class PostImg:
         #     print(f"Request error: {e}")
 
     def generate_caption(self):
+        import ast
         #get hashtags from post or if none default
         if self.hashtags == None:
             self.hashtags == self.default_hashtags
             print('post has no hastags')
-        hashtags = [word.strip().replace('"', '')for word in self.hashtags]
-        hashtags = ''.join(hashtags)
+        hashtags = ast.literal_eval(self.hashtags)
+        hashtags = [word.strip().replace('"', '') for word in hashtags]
         hashtags_with_hash = ['#' + tag for tag in hashtags]
-        # Join them into a single string separated by spaces
-        hashtags_f = ' '.join(hashtags_with_hash)
+        hashtag_final = ' '.join(hashtags_with_hash)
         self.caption = f'''⅋ 🪡
 
                         Via. @{self.owner_username}
@@ -174,7 +174,7 @@ class PostImg:
                         .
                         .
                         .
-                        {hashtags_f}'''
+                        {hashtag_final}'''
         
 
     def insta_api_post(self):
