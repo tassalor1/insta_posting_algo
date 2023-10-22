@@ -47,30 +47,35 @@ class PostImg:
             logging.warning("posted_ids file not found")
 
     def get_top_post(self):
+        print('get_top_post function running')
         conn = self.connect_db()
         if conn:
             cur = conn.cursor()
-            cur.execute("SELECT MAX(likesCount), ownerId, hashtags FROM insta_hashtag")
+            cur.execute("SELECT MAX(likesCount), id, hashtags FROM insta_hashtag")
             row = cur.fetchone()
             #loop till post has matching downlaoded img
+            skip = 1 
             while row:
-                self.top_post, self.owner_id, self.hashtags = row
+                self.top_post, self.post_id, self.hashtags = row
                 
-                img_path = os.path.join('downloaded_images', f'image_{self.top_post}.jpg')
+                img_path = os.path.join('downloaded_images', f'image_{self.post_id}.jpg')
                 
                 if os.path.exists(img_path):
                     break  
-                
+            
                 # If image doesn't exist, fetch next row with lesser likesCount
-                cur.execute("SELECT MAX(likesCount), ownerId, hashtags FROM insta_hashtag WHERE likesCount < ?", (self.top_post,))
+                cur.execute("SELECT MAX(likesCount), id, hashtags FROM insta_hashtag WHERE likesCount < ?", (self.post_id))
                 row = cur.fetchone()
+                skip += 1
+                print({skip})
 
             if row is None:
                 print("No more rows to fetch.")
                 logging.info('No more rows to fetch')
 
+
     def get_img(self):
-        self.img_path = os.path.join('downloaded_images', f'image_{self.top_post}.jpg')
+        self.img_path = os.path.join('downloaded_images', f'image_{self.post_id}.jpg')
         
         if os.path.exists(self.img_path):
             logging.info('Matching image fetched')
@@ -146,7 +151,6 @@ class PostImg:
         
 
     def insta_api_post(self):
-
         url = f"https://graph.facebook.com/v18.0/{self.insta_user_id}/media"
         # create container
         params = {
