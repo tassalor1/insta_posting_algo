@@ -17,18 +17,20 @@ class PostImg:
     def setup_logging():
         logging.basicConfig(filename='post_operations.log', level=logging.INFO)
 
-    def __init__(self, google_json, insta_access_token, insta_user_id, default_hashtags, db_path):
+    def __init__(self, google_json, insta_access_token, insta_user_id, default_hashtags, db_path, id_db_path):
         self.google_json = google_json
         self.insta_access_token = insta_access_token
         self.insta_user_id = insta_user_id
         self.default_hashtags = default_hashtags
         self.db_path = db_path
+        self.id_db_path = id_db_path
         self.ids = []
-        self.top_post = None
         self.owner_id = None
         self.hashtags = None
+        self.post_id = None
         self.public_url = ()
         self.owner_username = ()
+        self.top_post = None
 
 
     def connect_db(self):
@@ -43,14 +45,15 @@ class PostImg:
     def get_posted_posts(self):
         ## get ids that have been posted to cross reference
         try:
-            conn = sqlite3.connect(self.db_path)
-            if conn:
-            cur = conn.cursor()
-            cur.execute("SELECT id FROM posted_ids")
-            rows = cur.fetchall()
+            conn_id = sqlite3.connect(self.id_db_path)
+            print('id db connected')
+            cur_id = conn_id.cursor()
+            cur_id.execute("SELECT id FROM posted_ids")
+            rows = cur_id.fetchall()
             self.ids = [row[0] for row in rows]
-            conn.close()
-        except Exception as e:
+            conn_id.close()
+        except Exception as e: 
+            print(f'Database not connected{e}')
             logging.warning(f"Database not connected{e}")
 
     def get_top_post(self):
@@ -61,12 +64,11 @@ class PostImg:
             cur.execute("SELECT MAX(likesCount), id, hashtags, url FROM insta_hashtag")
             row = cur.fetchone()
             #loop till post has matching downlaoded img
-            
             while row:
                 self.top_post, self.post_id, self.hashtags, self.url = row
                 
                 img_path = os.path.join('downloaded_images', f'image_{self.post_id}.jpg')
-                if self.post_id in self.ids and os.path.exists(img_path):
+                if self.post_id not in self.ids and os.path.exists(img_path):
                     break
                 
             
@@ -139,27 +141,11 @@ class PostImg:
             print("owner_username not found")
             logging.error("owner_username not found")
         
-
-        
-            #get username of the author using api
-        # try:
-        #     owner_url = f"https://graph.instagram.com/{self.owner_id}?fields=username&access_token={self.insta_access_token}"
-        #     owner_response = requests.get(owner_url)
-        #     owner_response.raise_for_status()
-        #     owner_data = owner_response.json()
-        #     self.owner_username = owner_data.get('username', 'Username not found')
-        #     logging.info(f'Owner username acquired: {self.owner_username}')
-        #     print(f'Owner username acquired: {self.owner_username}')
-
-        # except requests.RequestException as e:
-        #     logging.error(f"Request error: {e}")
-        #     print(f"Request error: {e}")
-
     def generate_caption(self):
         import ast
         #get hashtags from post or if none default
         if self.hashtags == None:
-            self.hashtags == self.default_hashtags
+            self.hashtags = self.default_hashtags
             print('post has no hastags')
         hashtags = ast.literal_eval(self.hashtags)
         hashtags = [word.strip().replace('"', '') for word in hashtags]
@@ -202,18 +188,28 @@ class PostImg:
             logging.info(response.json())
             print(f'post has been created: {publish_url}')
             print(self.post_id)
-            # create a file that add posted ids into it
-            with open("D:/coding/instagram/scripts/img_posting/posted_ids", 'a') as f:
-                print("File opened successfully.")
-                if self.post_id is not None:
-                    f.write(str(self.post_id) + '\n')
-                    f.flush() 
-                    print(f"Image ID {self.post_id} has been written to 'posted_ids' file.")
-                else:
-                    print("Error: self.post_id is None. Image ID not written to 'posted_ids' file.")
 
         except requests.RequestException as e:
             logging.error(f"Request error: {e}")
+
+    def insert_id(self):
+        try:
+            conn = sqlite3.connect(self.id_db_path)  
+            cursor = conn.cursor()
+            if self.post_id is not None:
+                cursor.execute("INSERT INTO posted_ids (id) VALUES (?);", (str(self.post_id),))
+                conn.commit()
+                print(f"Image ID {self.post_id} has been written to posted_ids db.")
+                self.ids.append(self.post_id)
+            else:
+                print("Error: self.post_id is None. Image ID not written to posted_ids db.")
+
+            conn.close()
+        except sqlite3.Error as e:
+            print(f"db error: {e}")
+            logging.error(f"db error: {e}")
+
+
 
  
 config = {
@@ -223,7 +219,8 @@ config = {
     "default_hashtags": ["gorpcore","outerwear", "gorp", "gorpcorefashion", "outdoors", 
                          "arcteryx", "salomon", "gorpcorefashion", "gorpcorestyle", "functionalarchive", 
                          "ootd", "explore", "getoutside"],
-    "db_path": "D:/coding/instagram/scripts/insta_hashtag.db"
+    "db_path": "D:/coding/instagram/scripts/insta_hashtag.db",
+    "id_db_path": "D:/coding/instagram/scripts/posted_ids.db"
 }
 if __name__ == "__main__":
     PostImg.setup_logging()
@@ -235,4 +232,5 @@ if __name__ == "__main__":
     post.get_owner_username()
     post.generate_caption()
     post.insta_api_post()
+    post.insert_id()
     
