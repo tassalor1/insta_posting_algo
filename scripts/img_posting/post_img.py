@@ -43,10 +43,15 @@ class PostImg:
     def get_posted_posts(self):
         ## get ids that have been posted to cross reference
         try:
-            with open('posted_ids', 'r') as f:
-                self.ids = [line.strip() for line in f]
-        except FileNotFoundError:
-            logging.warning("posted_ids file not found")
+            conn = sqlite3.connect(self.db_path)
+            if conn:
+            cur = conn.cursor()
+            cur.execute("SELECT id FROM posted_ids")
+            rows = cur.fetchall()
+            self.ids = [row[0] for row in rows]
+            conn.close()
+        except Exception as e:
+            logging.warning(f"Database not connected{e}")
 
     def get_top_post(self):
         print('get_top_post function running')
@@ -61,12 +66,12 @@ class PostImg:
                 self.top_post, self.post_id, self.hashtags, self.url = row
                 
                 img_path = os.path.join('downloaded_images', f'image_{self.post_id}.jpg')
+                if self.post_id in self.ids and os.path.exists(img_path):
+                    break
                 
-                if os.path.exists(img_path):
-                    break  
             
                 # If image doesn't exist, fetch next row with smaller likesCount
-                cur.execute("SELECT MAX(likesCount), id, hashtags, url FROM insta_hashtag WHERE likesCount < ?", (self.post_id))
+                cur.execute("SELECT MAX(likesCount), id, hashtags, url FROM insta_hashtag WHERE likesCount < ?", (self.post_id,))
                 row = cur.fetchone()
                
             if row is None:
@@ -196,9 +201,16 @@ class PostImg:
             response = requests.post(publish_url)
             logging.info(response.json())
             print(f'post has been created: {publish_url}')
+            print(self.post_id)
             # create a file that add posted ids into it
-            with open('posted_ids', 'a') as f:
-                f.write(str(self.top_post) + '\n')
+            with open("D:/coding/instagram/scripts/img_posting/posted_ids", 'a') as f:
+                print("File opened successfully.")
+                if self.post_id is not None:
+                    f.write(str(self.post_id) + '\n')
+                    f.flush() 
+                    print(f"Image ID {self.post_id} has been written to 'posted_ids' file.")
+                else:
+                    print("Error: self.post_id is None. Image ID not written to 'posted_ids' file.")
 
         except requests.RequestException as e:
             logging.error(f"Request error: {e}")
