@@ -8,6 +8,7 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from urllib.parse import urlparse
 import instaloader
+
 # https://developers.facebook.com/docs/instagram-api/guides/content-publishing # insta docs
 
 
@@ -39,9 +40,10 @@ class PostImg:
             print('db connected')
             return conn
         except sqlite3.Error as e:
-            logging.error(f"db error: {e}")
+            logging.error(f"db error connect: {e}")
             return None    
-        
+
+
     def get_posted_posts(self):
         ## get ids that have been posted to cross reference
         try:
@@ -49,36 +51,51 @@ class PostImg:
             print('id db connected')
             cur_id = conn_id.cursor()
             cur_id.execute("SELECT id FROM posted_ids")
-            rows = cur_id.fetchall()
-            self.ids = [row[0] for row in rows]
+            rows_id = cur_id.fetchall()
+            self.ids = [row[0] for row in rows_id]
+            print("Fetched IDs: ", self.ids)
             conn_id.close()
         except Exception as e: 
             print(f'Database not connected{e}')
             logging.warning(f"Database not connected{e}")
 
+
     def get_top_post(self):
         print('get_top_post function running')
-        conn = self.connect_db()
-        if conn:
-            cur = conn.cursor()
-            cur.execute("SELECT MAX(likesCount), id, hashtags, url FROM insta_hashtag")
-            row = cur.fetchone()
-            #loop till post has matching downlaoded img
-            while row:
-                self.top_post, self.post_id, self.hashtags, self.url = row
-                
-                img_path = os.path.join('downloaded_images', f'image_{self.post_id}.jpg')
-                if self.post_id not in self.ids and os.path.exists(img_path):
-                    break
-                
-            
-                # If image doesn't exist, fetch next row with smaller likesCount
-                cur.execute("SELECT MAX(likesCount), id, hashtags, url FROM insta_hashtag WHERE likesCount < ?", (self.post_id,))
+
+        try:
+            with sqlite3.connect(self.id_db_path) as conn:
+                cur = conn.cursor()
+
+                # Fetch all posts sorted by likesCount in descending order
+                cur.execute("SELECT likesCount, id, hashtags, url FROM insta_hashtag ORDER BY likesCount DESC")
+                # all_rows = cur.fetchall()
+
+                # for row in all_rows:
+                #     self.top_post, self.post_id, self.hashtags, self.url = row
                 row = cur.fetchone()
-               
-            if row is None:
-                print("No more rows to fetch.")
-                logging.info('No more rows to fetch')
+                #loop till post has matching downlaoded img
+                while row:
+                    self.top_post, self.post_id, self.hashtags, self.url = row
+                    print(self.url)
+
+                    img_path = os.path.join('downloaded_images', f'image_{self.post_id}.jpg')
+
+                    if self.post_id not in self.ids and os.path.exists(img_path):
+                        print("This post is new and will be posted.")
+                        break
+                    else:
+                        print("This post is either already posted or the image does not exist.")
+
+                else:
+                    print("No more rows to fetch.")
+                    logging.info('No more rows to fetch')
+
+        except Exception as e:
+            print(f"Error occurred: {e}")
+            logging.error(f"Error occurred: {e}")
+
+
 
 
     def get_img(self):
@@ -125,7 +142,7 @@ class PostImg:
 
     def get_owner_username(self):
         # get short coe from url
-        parsed_url = urlparse(self.url)
+        parsed_url = urlparse(self.url.encode())
         path_parts = parsed_url.path.split('/')
 
         if len(path_parts) >= 2:
@@ -141,6 +158,7 @@ class PostImg:
             print("owner_username not found")
             logging.error("owner_username not found")
         
+
     def generate_caption(self):
         import ast
         #get hashtags from post or if none default
@@ -207,11 +225,9 @@ class PostImg:
             conn.close()
         except sqlite3.Error as e:
             print(f"db error: {e}")
-            logging.error(f"db error: {e}")
+            logging.error(f"db error insert id: {e}")
 
 
-
- 
 config = {
     "google_json": "D:/coding/instagram/scripts/private/insta-401020-8a55316147d7.json",
     "insta_access_token": insta_access_token,
@@ -222,6 +238,8 @@ config = {
     "db_path": "D:/coding/instagram/scripts/insta_hashtag.db",
     "id_db_path": "D:/coding/instagram/scripts/posted_ids.db"
 }
+
+
 if __name__ == "__main__":
     PostImg.setup_logging()
     post = PostImg(**config)
