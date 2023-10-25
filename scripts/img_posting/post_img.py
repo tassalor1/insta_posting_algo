@@ -31,14 +31,15 @@ class PostImg:
         self.public_url = ()
         self.owner_username = ()
         self.top_post = None
+        self.db_path=None
 
 
-    def connect_db(self, db_path=None):
-        if db_path is None:
-            db_path = self.db_path
-
+    def connect_db(self,):
+        if self.db_path is None:
+            raise ValueError("Database path is not set.")
+            
         try:
-            conn = sqlite3.connect(db_path)
+            conn = sqlite3.connect(self.db_path)
             print('db connected')
             return conn
         except sqlite3.Error as e:
@@ -57,7 +58,7 @@ class PostImg:
 
 
     def get_top_post(self):
-        """fetch the top post details if ti has img and is not already in posted id db"""
+        """fetch the top post details if it has img and is not already in posted id db"""
         conn = self.connect_db(self.db_path)
         if conn:
             cur = conn.cursor()
@@ -77,7 +78,7 @@ class PostImg:
 
 
     def google_drive(self):
-        """upload image to Google Drive."""
+        """upload image to google drive"""
         try:
             credentials = Credentials.from_service_account_file(self.google_json, scopes=['https://www.googleapis.com/auth/drive'])
             drive_service = build('drive', 'v3', credentials=credentials)
