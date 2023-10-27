@@ -31,13 +31,11 @@ class PostImg:
         self.public_url = ()
         self.owner_username = ()
         self.top_post = None
-        self.db_path=None
 
 
-    def connect_db(self,):
+    def connect_db(self):
         if self.db_path is None:
             raise ValueError("Database path is not set.")
-            
         try:
             conn = sqlite3.connect(self.db_path)
             print('db connected')
@@ -48,7 +46,7 @@ class PostImg:
         
     def get_posted_posts(self):
         """fetch IDs of posts that have been already posted"""
-        conn = self.connect_db(self.id_db_path)
+        conn = self.connect_db()
         if conn:
             cur = conn.cursor()
             cur.execute("SELECT id FROM posted_ids")
