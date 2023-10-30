@@ -1,0 +1,5 @@
+apify-client
+requests
+google-auth
+google-api-python-client
+instaloader
