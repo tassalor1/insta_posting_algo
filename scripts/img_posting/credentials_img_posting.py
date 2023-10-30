@@ -1,0 +1,5 @@
+APIFY_API_KEY = "apify_api_VfYMRA9EmVQQVcirL4sjgG9s39Y1AD3UVvwZ"
+insta_user = 'clave.xt'
+insta_password = 'Fuckhtmlrat'
+insta_user_id = '17841461285196685'
+insta_access_token = 'EAAPRAXRSsOQBO06t7JPvBEyhv0XQCxh4N60BJDxouBAbRxWaDxNqYQ7oZCvYPnBWZC78lf9p3cbSaDNlW2zZBXFeJvtpjGezKF0CGFNY0HajxWZAeE7sbueeMnw5aYxW6RGZAeOPtQWz5mfGN5hMvGQE6NSePR7AeVJPnSJZAArgd8uFbxEld9PKpf1gXZAhVcQRYCwzSe3'

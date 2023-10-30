@@ -5,7 +5,6 @@ from credentials_data_pull import APIFY_API_KEY
 import logging
 import os
 import requests
-import subprocess
 import time
  
 
@@ -15,16 +14,11 @@ class Bot:
     def setup_logging():
         logging.basicConfig(filename='db_operations.log', level=logging.INFO)
 
-    def __init__(self, APIFY_API_KEY, hashtags, result_limit, apify_actor, min_likes, db_path, post_skip_count, img_urls, proxy_config):
-        self.APIFY_API_KEY = APIFY_API_KEY
-        self.hashtags = hashtags
-        self.result_limit = result_limit
-        self.apify_actor = apify_actor
-        self.min_likes = min_likes
-        self.db_path = db_path
-        self.post_skip_count = post_skip_count
+    def __init__(self, **config):
+        for key, value in config.items():
+            setattr(self, key, value)
+        self.posts = []
         self.img_urls = []
-        self.proxy_config = proxy_config
 
     def connect_db(self):
         try:
@@ -33,76 +27,61 @@ class Bot:
         except sqlite3.Error as e:
             logging.error(f"db error: {e}")
             return None
+        
+
+    def get_existing_ids(self):
+        conn = self.connect_db()
+        if conn:
+            cur = conn.cursor()
+            cur.execute("SELECT id FROM insta_hashtag")
+            existing_ids = {row[0] for row in cur.fetchall()}
+            conn.close()
+            return existing_ids
+        return set()
 
 
     def fetch_data(self):
         self.client = ApifyClient(self.APIFY_API_KEY)
-        self.posts = []
         self.existing_ids = self.get_existing_ids()
         run_count = 0
-        try:
-            # apify api call for each hashtag
-            for hashtag in self.hashtags:
-                run_input = {"hashtags": [hashtag], 
-                            "resultsLimit": self.result_limit,
-                            "proxyConfiguration": self.proxy_config}
-                self.run = self.client.actor(self.apify_actor).call(run_input=run_input)
 
-                self.img_urls = self.process_items()
+        for hashtag in self.hashtags:
+            run_input = {
+                "hashtags": [hashtag],
+                "resultsLimit": self.result_limit,
+                "proxyConfiguration": self.proxy_config
+            }
+            self.run = self.client.actor(self.apify_actor).call(run_input=run_input)
+            self.process_items()
 
-                time.sleep(90)
-                logging.info(f"Skipped {self.post_skip_count} posts")
-                logging.info(f'Fetched {len(self.posts)} items')
-                run_count += 1
-                print(f'run count: {run_count} = {hashtag}')
-
-        except Exception as e:
-                logging.error(f"db error: {e}")
+            time.sleep(90)
+            run_count += 1
+            logging.info(f"Skipped {self.post_skip_count} posts")
+            logging.info(f"Fetched {len(self.posts)} items")
+            print(f"Run count: {run_count} = {hashtag}")
         
 
     # check post has certain likes and not already in db
     def process_items(self):
-        self.img_urls = []
         for item in self.client.dataset(self.run["defaultDatasetId"]).iterate_items():
-            try:
-                if item['likesCount'] >= self.min_likes and item['id'] not in self.existing_ids:
-                    img_url = item.get('displayUrl', None)
-                    if img_url:
-                        self.img_urls.append(img_url)
-                    self.posts.append(item)
-                else:
-                    self.post_skip_count += 1
-            except Exception as e:
-                logging.error(f"Error in processing item: {e}")
-        return self.img_urls
+            if item['likesCount'] >= self.min_likes and item['id'] not in self.existing_ids:
+                self.posts.append(item)
+                img_url = item.get('displayUrl')
+                if img_url:
+                    self.img_urls.append(img_url)
+            else:
+                self.post_skip_count += 1
         
-        
-    
-    def get_existing_ids(self):
-        conn = None
-        try:
-            conn = self.connect_db()
-            cur = conn.cursor()
-            cur.execute("SELECT id FROM insta_hashtag")
-            existing_ids = {row[0] for row in cur.fetchall()}
-            return existing_ids
-        except sqlite3.Error as e:
-            logging.error(f"db error: {e}")
-        finally:
-            if conn:
-                conn.close()
-
 
     def insert_db(self, data):
-        if not data:
-            print("No data to insert")
+        if not self.posts:
             logging.info("No data to insert")
             return
         
-        conn = None
-        try:
-            conn = self.connect_db()
+        conn = self.connect_db()
+        if conn:
             cur = conn.cursor()
+            rows_inserted = 0
 
             insert_query = """
             INSERT OR IGNORE INTO insta_hashtag (
@@ -147,36 +126,23 @@ class Bot:
 
             logging.info(f'{rows_inserted} rows inserted')
             print(f'{rows_inserted} rows inserted')
-        finally:
-            if conn:
-                conn.commit()
-                conn.close()
+            conn.commit()
+            conn.close()
+            logging.info(f"{rows_inserted} rows inserted")
 
 
     def db_summary(self):
-        conn = None
-        try:
-            conn = self.connect_db()
+        conn = self.connect_db()
+        if conn:
             cur = conn.cursor()
-
-        
-            cur.execute("SELECT COUNT(*) FROM insta_hashtag;")
+            cur.execute("SELECT COUNT(*) FROM insta_hashtag")
             total_rows = cur.fetchone()[0]
-
             conn.close()
-
-            logging.info(f'db summary: {total_rows} rows in total')
-            print(f'db summary: {total_rows} rows in total')
-
-        finally:
-            if conn:
-                conn.close()
+            logging.info(f"DB summary: {total_rows} rows in total")
 
 
     def download_images(self):
-        if not os.path.exists('downloaded_images'):
-            os.makedirs('downloaded_images')
-
+        os.makedirs('downloaded_images', exist_ok=True)
         img_count = 0
         for idx, img_url in enumerate(self.img_urls):
             try:
@@ -195,24 +161,23 @@ class Bot:
         print(f"Successfully downloaded {img_count} out of {len(self.img_urls)} images")
         logging.info(f"Successfully downloaded {img_count} out of {len(self.img_urls)} images")
 
-       
-                    
-
-config = {
+                 
+if __name__ == "__main__":
+    Bot.setup_logging()
+    config = {
     "APIFY_API_KEY": APIFY_API_KEY,
     "hashtags": ['gorpcore', 'goretexstudio', 'outdoorism', 'gorpcorefashion', 'arcteryx', 'gorpcorestyle', 'outdoorism', 'itsbetteroutside'],
     "result_limit": 500,
     "apify_actor": "apify/instagram-hashtag-scraper",
-    "min_likes": 350,
+    "min_likes": 200,
     "db_path": "D:\coding\instagram\scripts\insta_hashtag.db",
     "post_skip_count": 0,
     "img_urls": [],
     "proxy_config": {'useApifyProxy': True,'apifyProxyGroups': ['BUYPROXIES94952']}
 }
-if __name__ == "__main__":
-    Bot.setup_logging()
+
     bot = Bot(**config)
     bot.fetch_data()
-    bot.insert_db(bot.posts)
+    bot.insert_db()
     bot.db_summary()
     bot.download_images()

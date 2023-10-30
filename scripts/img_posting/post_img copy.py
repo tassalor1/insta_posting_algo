@@ -73,7 +73,7 @@ class PostImg:
             row = cur.fetchone()
             while row is not None:
                 self.top_post, self.post_id, self.hashtags, self.url = row
-                print(f"Checking post ID: {self.post_id}")
+
 
                 img_path = os.path.join('downloaded_images', f'image_{self.post_id}.jpg')
                 if self.post_id not in self.all_ids and os.path.exists(img_path):
