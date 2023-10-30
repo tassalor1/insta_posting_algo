@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="efa45e83-0fb9-4cce-8c7e-ed22b7d3dc74" name="Changes" comment="new">
-      <change beforePath="$PROJECT_DIR$/scripts/img_posting/post_img.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/img_posting/post_img.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,6 +97,7 @@
       <workItem from="1697580316750" duration="93000" />
       <workItem from="1697748919552" duration="1347000" />
       <workItem from="1697999529147" duration="742000" />
+      <workItem from="1698696768019" duration="1219000" />
     </task>
     <task id="LOCAL-00001" summary="new post script/ changes">
       <option name="closed" value="true" />
