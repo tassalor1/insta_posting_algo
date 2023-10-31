@@ -1,14 +1,18 @@
-name: Run Python Scripts
+name: Daily Python Scripts
 
-on: [push]  
+on:
+  schedule:
+    - cron:  '0 10 * * *'
+    - cron:  '0 16 * * *'
+    - cron:  '0 20 * * *'
+
 
 jobs:
   run-scripts:
-    runs-on: ubuntu-latest  
-
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2  
+      uses: actions/checkout@v2
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -16,10 +20,10 @@ jobs:
         python-version: '3.11'
 
     - name: Install dependencies
-      run: pip install -r requirements.txt  
+      run: pip install -r requirements.txt
 
-    - name: Run hashtag_scraping.py
-      run: python hashtag_scraping.py  
+    - name: Run script1.py
+      run: python script1.py
 
-    - name: Run post_img.py
-      run: python post_img.py  
+    - name: Run script2.py
+      run: python script2.py

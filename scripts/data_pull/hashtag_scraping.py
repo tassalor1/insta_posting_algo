@@ -166,8 +166,8 @@ if __name__ == "__main__":
     Bot.setup_logging()
     config = {
     "APIFY_API_KEY": APIFY_API_KEY,
-    "hashtags": ['gorpcore', 'goretexstudio', 'outdoorism', 'gorpcorefashion', 'arcteryx', 'gorpcorestyle', 'outdoorism', 'itsbetteroutside'],
-    "result_limit": 500,
+    "hashtags": ['#gorp', 'gorpcore', 'goretexstudio', '#goretexstudio', '#salomon',  '#nikeacg',  '#patagonia','gorpcorefashion', 'arcteryx', 'gorpcorestyle', 'outdoorism', 'itsbetteroutside'],
+    "result_limit": 300,
     "apify_actor": "apify/instagram-hashtag-scraper",
     "min_likes": 200,
     "db_path": "D:\coding\instagram\scripts\insta_hashtag.db",
