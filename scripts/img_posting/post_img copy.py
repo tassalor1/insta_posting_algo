@@ -151,12 +151,17 @@ class PostImg:
         #get hashtags from post or if none default
         if not self.hashtags:
             self.hashtags = self.default_hashtags
+            self.hashtags = str(self.hashtags )
             print('post has no hastags')
         hashtags = ast.literal_eval(self.hashtags)
         hashtags = [word.strip().replace('"', '') for word in hashtags]
         hashtags_with_hash = ['#' + tag for tag in hashtags]
         hashtag_final = ' '.join(hashtags_with_hash)
-        self.caption = f'''⅋ 🪡
+        self.caption = f'''👣 🗻
+
+
+
+
 
                         Via. @{self.owner_username}
 
@@ -223,7 +228,7 @@ config = {
     "insta_user_id": insta_user_id,
     "default_hashtags": ["gorpcore","outerwear", "gorp", "gorpcorefashion", "outdoors", 
                          "arcteryx", "salomon", "gorpcorefashion", "gorpcorestyle", "functionalarchive", 
-                         "ootd", "explore", "getoutside"],
+                         "ootd", "explore", "getoutside", '#goretexstudio'],
     "db_path": "D:/coding/instagram/scripts/insta_hashtag.db",
     "id_db_path": "D:/coding/instagram/scripts/posted_ids.db"
 }
