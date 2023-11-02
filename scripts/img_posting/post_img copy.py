@@ -2,7 +2,7 @@ import requests
 from credentials_img_posting import insta_access_token, insta_user_id
 import os
 import sqlite3
-import logging
+import logging 
 import ast
 from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
@@ -26,6 +26,7 @@ class PostImg:
         self.db_path = db_path
         self.id_db_path = id_db_path
         self.ids = []
+        self.all_ids = []
         self.owner_id = None
         self.hashtags = None
         self.post_id = None
