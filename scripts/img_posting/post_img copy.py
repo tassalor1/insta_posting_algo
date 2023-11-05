@@ -9,6 +9,7 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from urllib.parse import urlparse
 import instaloader
+import time
 # https://developers.facebook.com/docs/instagram-api/guides/content-publishing # insta docs
 
 
@@ -51,12 +52,12 @@ class PostImg:
             print('id db connected')
 
             cur_id = conn_id.cursor()
-            cur_id.execute("SELECT id FROM posted_ids")
+            cur_id.execute("SELECT id FROM posted_ids_new")
             rows = cur_id.fetchall()
 
             self.all_ids = set()
             self.all_ids = [str(row[0]) for row in rows]
-            print(f"IDs fetched from posted_ids: {self.all_ids}")
+            
 
             conn_id.close()
 
@@ -123,7 +124,7 @@ class PostImg:
             self.public_url = f"https://drive.google.com/uc?export=view&id={file_id}"
 
             logging.info(f"Public URL: {self.public_url} has been created")
-            print(f"Public URL: {self.public_url} has been created")
+            
 
         except Exception as e:
             logging.error(f"Google Drive error: {e}")
@@ -142,7 +143,6 @@ class PostImg:
             post = instaloader.Post.from_shortcode(L.context, owner_short_code)
 
             self.owner_username = post.owner_username
-            print(f"owner_username {self.owner_username}")
             logging.info(f"owner_username {self.owner_username}")
         else:
             print("owner_username not found")
@@ -150,12 +150,25 @@ class PostImg:
         
     def generate_caption(self):
         #get hashtags from post or if none default
-        if not self.hashtags:
-            self.hashtags = self.default_hashtags
-            self.hashtags = str(self.hashtags )
-            print('post has no hastags')
-        hashtags = ast.literal_eval(self.hashtags)
-        hashtags = [word.strip().replace('"', '') for word in hashtags]
+        # if not self.hashtags:
+        #     self.hashtags = self.default_hashtags
+        #     self.hashtags = str(self.hashtags )
+        #     print('post has no hastags')
+        # hashtags = ast.literal_eval(self.hashtags)
+        # hashtags = [word.strip().replace('"', '') for word in hashtags]
+        # hashtags_with_hash = ['#' + tag for tag in hashtags]
+        # hashtag_final = ' '.join(hashtags_with_hash)
+        if self.hashtags:
+        # Ensure the hashtags are in the correct format (list of strings)
+            if isinstance(self.hashtags, str):
+                hashtags = ast.literal_eval(self.hashtags)
+            else:
+                hashtags = self.hashtags
+        else:
+            # Use default hashtags if none are provided
+            hashtags = self.default_hashtags
+
+        # Process hashtags into a string with hash symbols
         hashtags_with_hash = ['#' + tag for tag in hashtags]
         hashtag_final = ' '.join(hashtags_with_hash)
         self.caption = f'''👣 🗻
@@ -208,7 +221,7 @@ class PostImg:
             conn = sqlite3.connect(self.id_db_path)  
             cursor = conn.cursor()
             if self.post_id is not None:
-                cursor.execute("INSERT INTO posted_ids (id) VALUES (?);", (str(self.post_id),))
+                cursor.execute("INSERT INTO posted_ids_new (id) VALUES (?);", (str(self.post_id),))
                 conn.commit()
                 print(f"Image ID {self.post_id} has been written to posted_ids db.")
                 self.ids.append(self.post_id)
@@ -231,16 +244,25 @@ config = {
                          "arcteryx", "salomon", "gorpcorefashion", "gorpcorestyle", "functionalarchive", 
                          "ootd", "explore", "getoutside", '#goretexstudio'],
     "db_path": "D:/coding/instagram/scripts/insta_hashtag.db",
-    "id_db_path": "D:/coding/instagram/scripts/posted_ids.db"
+    "id_db_path": "D:/coding/instagram/scripts/posted_ids_new.db"
 }
 if __name__ == "__main__":
     PostImg.setup_logging()
     post = PostImg(**config)
-    post.get_posted_posts()
-    post.get_top_post()
-    post.get_img()
-    post.google_drive()
-    post.get_owner_username()
-    post.generate_caption()
-    post.insta_api_post()
-    post.insert_id()
+    
+    for _ in range(10):  # Loop 10 times
+        post.get_posted_posts()
+        post.get_top_post()
+        
+        # Check if get_top_post() found a post to process
+        if post.post_id is not None:  # Ensure a post_id was found
+            post.get_img()
+            post.google_drive()
+            post.get_owner_username()
+            post.generate_caption()
+            post.insta_api_post()
+            post.insert_id()
+        else:
+            print("No suitable post found. Skipping iteration.")
+
+        time.sleep(5)
