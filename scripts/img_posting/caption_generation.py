@@ -5,22 +5,29 @@ from credentials_img_posting import openai_key
 def generate_caption():
     openai.api_key = openai_key
     background_info = (
-        "Craft a slick, nine-word max caption that nods to gorpcore enthusiasts. "
-        "Avoid sales tones; speak the insider language of outdoor hipster. Include one fitting emoji. No hashtags"
+        "Create a caption that adheres to the following rules: "
+        "No hashtags. Include one fitting emoji. It should be slick, a maximum of nine words, "
+        "nod to gorpcore enthusiasts, avoid sales tones, speak the insider language "
+        "of outdoor hipsters."
     )
-    # Your image description goes here
-    image_description = "A photo of a serene mountain lake at sunrise."
+
+
 
     # Combine the background with the specific image description
-    prompt = f"{background_info}"
+    prompt = f"{background_info}\nRemember, do not use hashtags."
 
-    response = openai.Completion.create(
-      engine="gpt-3.5-turbo-instruct",
-      prompt=prompt,
-      max_tokens=60
+    response = openai.completions.create(
+      model="gpt-3.5-turbo-instruct",
+      prompt=prompt, 
+      max_tokens=60,
+      temperature=0.5,
     )
 
-    # Extract the caption
-    caption = response.choices[0].text.strip()
+    
+    caption = response.choices[0].text.strip() # extract caption
+    caption = caption.replace('#', '') # replace hashtag if it doesnt follow rules
+    caption = caption.replace('"', '')
     print("Suggested Caption:", caption)
     return caption
+
+generate_caption()
