@@ -15,8 +15,7 @@ def generate_caption():
 
     # Combine the background with the specific image description
     prompt = f"{background_info}\nRemember, do not use hashtags."
-
-    response = openai.completions.create(
+    response = openai.Completion.create(
       model="gpt-3.5-turbo-instruct",
       prompt=prompt, 
       max_tokens=60,
