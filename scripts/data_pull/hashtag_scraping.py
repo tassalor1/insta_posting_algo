@@ -76,7 +76,6 @@ class Bot:
 
     def insert_db(self):
         if not self.posts:
-            print(self.posts)
             logging.info("No data to insert")
             return
         
@@ -98,7 +97,6 @@ class Bot:
 
             # insert into db
             for item in self.posts:
-                print(item)
                 try:
                     values = (
                         item['id'],
@@ -169,9 +167,9 @@ if __name__ == "__main__":
     config = {
     "APIFY_API_KEY": APIFY_API_KEY,
     "hashtags": ['gorp', 'gorpcore', 'goretexstudio', 'goretexstudio', 'salomon',  'nikeacg',  'patagonia','gorpcorefashion', 'arcteryx', 'gorpcorestyle', 'outdoorism', 'itsbetteroutside'],
-    "result_limit": 10,
+    "result_limit": 500,
     "apify_actor": "apify/instagram-hashtag-scraper",
-    "min_likes": 1,
+    "min_likes": 100,
     "db_path": "D:\coding\instagram\scripts\insta_hashtag.db",
     "post_skip_count": 0,
     "img_urls": [],
