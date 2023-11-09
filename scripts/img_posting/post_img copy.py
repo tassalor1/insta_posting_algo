@@ -1,5 +1,6 @@
 import requests
 from credentials_img_posting import insta_access_token, insta_user_id
+from caption_generation import generate_caption
 import os
 import sqlite3
 import logging 
@@ -44,7 +45,7 @@ class PostImg:
         except sqlite3.Error as e:
             logging.error(f"db error: {e}")
             return None    
-        
+
     def get_posted_posts(self):
         ## get ids that have been posted to cross reference
         try:
@@ -171,7 +172,9 @@ class PostImg:
         # Process hashtags into a string with hash symbols
         hashtags_with_hash = ['#' + tag for tag in hashtags]
         hashtag_final = ' '.join(hashtags_with_hash)
-        self.caption = f'''👣 🗻
+        ''' calls the caption function using openai '''
+        gen_cap = generate_caption()
+        self.caption = f'''{gen_cap}🗻
 
 
 
@@ -250,7 +253,7 @@ if __name__ == "__main__":
     PostImg.setup_logging()
     post = PostImg(**config)
     
-    for _ in range(10):  # Loop 10 times
+    for _ in range(5):  # Loop 10 times
         post.get_posted_posts()
         post.get_top_post()
         
