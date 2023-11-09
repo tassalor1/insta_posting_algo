@@ -65,6 +65,7 @@ class Bot:
     def process_items(self):
         for item in self.client.dataset(self.run["defaultDatasetId"]).iterate_items():
             if item['likesCount'] >= self.min_likes and item['id'] not in self.existing_ids:
+                print(item)
                 self.posts.append(item)
                 img_url = item.get('displayUrl')
                 if img_url:
@@ -73,8 +74,9 @@ class Bot:
                 self.post_skip_count += 1
         
 
-    def insert_db(self, data):
+    def insert_db(self):
         if not self.posts:
+            print(self.posts)
             logging.info("No data to insert")
             return
         
@@ -87,7 +89,7 @@ class Bot:
             INSERT OR IGNORE INTO insta_hashtag (
                 id, type, shortCode, caption, hashtags, mentions, url, commentsCount, 
                 dimensionsHeight, dimensionsWidth, 
-                displayUrl, images, alt, likesCount, timestamp, ownerId, ownerUsername
+                displayUrl, images, alt, likesCount, timestamp, ownerId
             )
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             """
@@ -95,7 +97,8 @@ class Bot:
             rows_inserted = 0
 
             # insert into db
-            for item in data:
+            for item in self.posts:
+                print(item)
                 try:
                     values = (
                         item['id'],
@@ -113,8 +116,7 @@ class Bot:
                         item.get('alt', 'default_alt'),
                         item.get('likesCount', 0),
                         item.get('timestamp', 'default_timestamp'),
-                        item.get('ownerId', 'default_ownerId'),
-                        item.get('ownerUsername', 'default_ownerUsername')
+                        item.get('ownerId', 'default_ownerId') 
 
                     )
 
@@ -166,10 +168,10 @@ if __name__ == "__main__":
     Bot.setup_logging()
     config = {
     "APIFY_API_KEY": APIFY_API_KEY,
-    "hashtags": ['#gorp', 'gorpcore', 'goretexstudio', '#goretexstudio', '#salomon',  '#nikeacg',  '#patagonia','gorpcorefashion', 'arcteryx', 'gorpcorestyle', 'outdoorism', 'itsbetteroutside'],
-    "result_limit": 300,
+    "hashtags": ['gorp', 'gorpcore', 'goretexstudio', 'goretexstudio', 'salomon',  'nikeacg',  'patagonia','gorpcorefashion', 'arcteryx', 'gorpcorestyle', 'outdoorism', 'itsbetteroutside'],
+    "result_limit": 10,
     "apify_actor": "apify/instagram-hashtag-scraper",
-    "min_likes": 200,
+    "min_likes": 1,
     "db_path": "D:\coding\instagram\scripts\insta_hashtag.db",
     "post_skip_count": 0,
     "img_urls": [],
