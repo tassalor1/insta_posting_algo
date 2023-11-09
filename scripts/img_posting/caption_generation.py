@@ -8,7 +8,7 @@ def generate_caption():
         "Create a caption that adheres to the following rules: "
         "No hashtags. Include one fitting emoji. It should be slick, a maximum of nine words, "
         "nod to gorpcore enthusiasts, avoid sales tones, speak the insider language "
-        "of outdoor hipsters."
+        "of outdoor hipsters. Do not mention the word gorpcore"
     )
 
 
