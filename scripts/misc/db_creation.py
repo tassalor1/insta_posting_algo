@@ -8,7 +8,7 @@ def create_posted_ids_table(db_path):
         
         # Create a table
         conn.execute("""
-        CREATE TABLE IF NOT EXISTS posted_ids (
+        CREATE TABLE IF NOT EXISTS posted_ids_new (
             id INTEGER PRIMARY KEY
         );
         """)
@@ -25,5 +25,5 @@ def create_posted_ids_table(db_path):
         logging.error(f"Database error: {e}")
 
 # Usage
-db_path = "D:/coding/instagram/scripts/posted_ids.db"
+db_path = "D:/coding/instagram/scripts/posted_ids_new.db"
 create_posted_ids_table(db_path)
