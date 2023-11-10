@@ -1,6 +1,6 @@
 import requests
 from credentials_img_posting import insta_access_token, insta_user_id
-from caption_generation import generate_caption
+# from caption_generation import generate_caption
 import os
 import sqlite3
 import logging 
@@ -173,8 +173,8 @@ class PostImg:
         hashtags_with_hash = ['#' + tag for tag in hashtags]
         hashtag_final = ' '.join(hashtags_with_hash)
         ''' calls the caption function using openai '''
-        gen_cap = generate_caption()
-        self.caption = f'''{gen_cap}🗻
+        # gen_cap = generate_caption()
+        self.caption = f'''🗻
 
 
 
@@ -253,7 +253,7 @@ if __name__ == "__main__":
     PostImg.setup_logging()
     post = PostImg(**config)
     
-    for _ in range(5):  # Loop 10 times
+    for _ in range(11):  # Loop 10 times
         post.get_posted_posts()
         post.get_top_post()
         

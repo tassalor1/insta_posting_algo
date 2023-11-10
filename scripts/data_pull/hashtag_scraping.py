@@ -65,7 +65,6 @@ class Bot:
     def process_items(self):
         for item in self.client.dataset(self.run["defaultDatasetId"]).iterate_items():
             if item['likesCount'] >= self.min_likes and item['id'] not in self.existing_ids:
-                print(item)
                 self.posts.append(item)
                 img_url = item.get('displayUrl')
                 if img_url:
@@ -167,7 +166,7 @@ if __name__ == "__main__":
     config = {
     "APIFY_API_KEY": APIFY_API_KEY,
     "hashtags": ['gorp', 'gorpcore', 'goretexstudio', 'goretexstudio', 'salomon',  'nikeacg',  'patagonia','gorpcorefashion', 'arcteryx', 'gorpcorestyle', 'outdoorism', 'itsbetteroutside'],
-    "result_limit": 500,
+    "result_limit": 300,
     "apify_actor": "apify/instagram-hashtag-scraper",
     "min_likes": 100,
     "db_path": "D:\coding\instagram\scripts\insta_hashtag.db",
