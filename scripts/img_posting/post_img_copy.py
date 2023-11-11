@@ -18,7 +18,7 @@ class PostImg:
 
     @staticmethod
     def setup_logging():
-        logging.basicConfig(filename='post_operations.log', level=logging.INFO)
+        logging.basicConfig(filename='logging\post_img_operations.log', level=logging.INFO)
 
     def __init__(self, google_json, insta_access_token, insta_user_id, default_hashtags, db_path, id_db_path):
         self.google_json = google_json
@@ -237,8 +237,6 @@ class PostImg:
             logging.error(f"db error: {e}")
 
 
-
- 
 config = {
     "google_json": "D:/coding/instagram/scripts/private/insta-401020-8a55316147d7.json",
     "insta_access_token": insta_access_token,
