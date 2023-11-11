@@ -12,7 +12,7 @@ class Bot:
 
     @staticmethod
     def setup_logging():
-        logging.basicConfig(filename='db_operations.log', level=logging.INFO)
+        logging.basicConfig(filename='logging/hashtag_scraping_db_operations.log', level=logging.INFO)
 
     def __init__(self, **config):
         for key, value in config.items():
@@ -141,13 +141,13 @@ class Bot:
 
 
     def download_images(self):
-        os.makedirs('downloaded_images', exist_ok=True)
+        os.makedirs('\instagram\downloaded_images', exist_ok=True)
         img_count = 0
         for idx, img_url in enumerate(self.img_urls):
             try:
                 img = requests.get(img_url)
                 img.raise_for_status()
-                img_path = os.path.join('downloaded_images', f"image_{idx}.jpg")
+                img_path = os.path.join('\instagram\downloaded_images', f"image_{idx}.jpg")
                 with open(img_path, 'wb') as f:
                     f.write(img.content)
                 img_count += 1
@@ -158,17 +158,18 @@ class Bot:
             time.sleep(1) 
 
         print(f"Successfully downloaded {img_count} out of {len(self.img_urls)} images")
-        logging.info(f"Successfully downloaded {img_count} out of {len(self.img_urls)} images")
+        logging.info(f"Successfully downloaded {img_count} out of {len(self.img_urls)} images to {img_path}")
 
                  
 if __name__ == "__main__":
     Bot.setup_logging()
     config = {
     "APIFY_API_KEY": APIFY_API_KEY,
-    "hashtags": ['gorp', 'gorpcore', 'goretexstudio', 'goretexstudio', 'salomon',  'nikeacg',  'patagonia','gorpcorefashion', 'arcteryx', 'gorpcorestyle', 'outdoorism', 'itsbetteroutside'],
-    "result_limit": 300,
+    # "hashtags": ['gorp', 'gorpcore', 'goretexstudio', 'goretexstudio', 'salomon',  'nikeacg',  'patagonia','gorpcorefashion', 'arcteryx', 'gorpcorestyle', 'outdoorism', 'itsbetteroutside'],
+    "hashtags": ['gorp'],
+    "result_limit": 20,
     "apify_actor": "apify/instagram-hashtag-scraper",
-    "min_likes": 100,
+    "min_likes": 1,
     "db_path": "D:\coding\instagram\scripts\insta_hashtag.db",
     "post_skip_count": 0,
     "img_urls": [],
