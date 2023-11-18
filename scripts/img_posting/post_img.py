@@ -18,7 +18,7 @@ class PostImg:
 
     @staticmethod
     def setup_logging():
-        logging.basicConfig(filename='logging\post_img_operations.log', level=logging.INFO)
+        logging.basicConfig(level=logging.INFO)
 
     def __init__(self, google_json, insta_access_token, insta_user_id, default_hashtags, db_path, id_db_path):
         self.google_json = google_json
@@ -113,7 +113,7 @@ class PostImg:
             media = MediaFileUpload(self.img_path, mimetype='image/jpeg')
             file = drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
 
-            file_id = file.get('id')
+            # file_id = file.get('id')
 
             # make the file publicly accessible and retrieve sharing link
             file_id = file.get('id')
@@ -150,27 +150,9 @@ class PostImg:
             logging.error("owner_username not found")
         
     def generate_caption(self):
-        #get hashtags from post or if none default
-        # if not self.hashtags:
-        #     self.hashtags = self.default_hashtags
-        #     self.hashtags = str(self.hashtags )
-        #     print('post has no hastags')
-        # hashtags = ast.literal_eval(self.hashtags)
-        # hashtags = [word.strip().replace('"', '') for word in hashtags]
-        # hashtags_with_hash = ['#' + tag for tag in hashtags]
-        # hashtag_final = ' '.join(hashtags_with_hash)
-        if self.hashtags:
-        # Ensure the hashtags are in the correct format (list of strings)
-            if isinstance(self.hashtags, str):
-                hashtags = ast.literal_eval(self.hashtags)
-            else:
-                hashtags = self.hashtags
-        else:
-            # Use default hashtags if none are provided
-            hashtags = self.default_hashtags
 
         # Process hashtags into a string with hash symbols
-        hashtags_with_hash = ['#' + tag for tag in hashtags]
+        hashtags_with_hash = ['#' + tag for tag in self.default_hashtags]
         hashtag_final = ' '.join(hashtags_with_hash)
         ''' calls the caption function using openai '''
         # gen_cap = generate_caption()
@@ -238,12 +220,12 @@ class PostImg:
 
 
 config = {
-    "google_json": "D:/coding/instagram/scripts/private/insta-401020-8a55316147d7.json",
+    "google_json": "D:\coding\instagram\priv\insta-401020-d7a22ae6536e.json",
     "insta_access_token": insta_access_token,
     "insta_user_id": insta_user_id,
     "default_hashtags": ["gorpcore","outerwear", "gorp", "gorpcorefashion", "outdoors", 
                          "arcteryx", "salomon", "gorpcorefashion", "gorpcorestyle", "functionalarchive", 
-                         "ootd", "explore", "getoutside", '#goretexstudio'],
+                         "ootd", "explore", "getoutside", 'goretexstudio'],
     "db_path": "D:/coding/instagram/scripts/insta_hashtag.db",
     "id_db_path": "D:/coding/instagram/scripts/posted_ids_new.db"
 }
@@ -251,7 +233,7 @@ if __name__ == "__main__":
     PostImg.setup_logging()
     post = PostImg(**config)
     
-    for _ in range(11):  # Loop 10 times
+    for _ in range(10):  
         post.get_posted_posts()
         post.get_top_post()
         
